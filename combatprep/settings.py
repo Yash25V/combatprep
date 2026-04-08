@@ -64,11 +64,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'combatprep.wsgi.application'
 
-# Switched strictly to MySQL as requested. 
+# Switched strictly to MySQL as requested.
 # You MUST have a MySQL server running or provide a valid DATABASE_URL in Render.
-DATABASES = {
-    'default': env.db('DATABASE_URL', default='mysql://root:password@127.0.0.1:3306/combatprep')
-}
+if env('DB_HOST', default=None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': env('DB_NAME', default='defaultdb'),
+            'USER': env('DB_USER', default='avnadmin'),
+            'PASSWORD': env('DB_PASSWORD', default=''),
+            'HOST': env('DB_HOST', default=''),
+            'PORT': env('DB_PORT', default='15087'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': env.db('DATABASE_URL', default='mysql://root:password@127.0.0.1:3306/combatprep')
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
