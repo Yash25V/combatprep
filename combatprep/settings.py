@@ -64,10 +64,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'combatprep.wsgi.application'
 
-# Configure Database fallback to sqlite if MySQL is not available.
-# To use MySQL permanently as requested, set DATABASE_URL="mysql://root:password@127.0.0.1:3306/combatprep" in .env
+# Switched strictly to MySQL as requested. 
+# You MUST have a MySQL server running or provide a valid DATABASE_URL in Render.
 DATABASES = {
-    'default': env.db('DATABASE_URL', default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+    'default': env.db('DATABASE_URL', default='mysql://root:password@127.0.0.1:3306/combatprep')
 }
 
 AUTH_PASSWORD_VALIDATORS = [
