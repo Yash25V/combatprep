@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from records.models import SoldierProfile, Assessment
 from accounts.models import User
+from .forms import CustomUserCreationForm
 
 @login_required
 def dashboard(request):
@@ -24,3 +26,15 @@ def dashboard(request):
         context['assessments'] = user.assessments.order_by('-date_recorded')
         
     return render(request, 'dashboard.html', context)
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Log the user in after registration
+            login(request, user)
+            return redirect('dashboard')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
